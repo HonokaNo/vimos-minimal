@@ -1,0 +1,12 @@
+qemu
+OVMF.fd
+*.efi
+*.elf
+*.o
+*.map
+*.a
+fat_disk
+disk.img
+*.iso
+iso
+serial
