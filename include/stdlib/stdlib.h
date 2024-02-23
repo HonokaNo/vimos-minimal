@@ -1,6 +1,7 @@
 #ifndef __VIMOS_STDLIB_H__
 #define __VIMOS_STDLIB_H__
 
-#include "stddef.h"
+#define min(a, b) (a > b ? b : a)
+#define max(a, b) (a > b ? a : b)
 
 #endif

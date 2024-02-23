@@ -1,21 +1,48 @@
 #ifndef __VIMOS_ASM_H__
 #define __VIMOS_ASM_H__
 
+#include <stddef.h>
 #include <stdint.h>
 
-#define cli() __asm__ __volatile__("cli")
-#define sti() __asm__ __volatile__("sti")
+extern uint8_t in8(uint16_t port);
+extern uint32_t in32(uint16_t port);
 
-static inline uint8_t in8(uint16_t port){
-  uint8_t data;
+extern void ins16(uint16_t port, void *buf, int rep);
 
-  __asm__ __volatile__("inb %%dx,%%al":"=a"(data):"d"(port));
-  return data;
-}
+extern void out8(uint16_t port, uint8_t data);
+extern void out32(uint16_t port, uint32_t data);
 
-#define out8(port, data) __asm__ __volatile__("outb %%al,%%dx"::"a"(data), "d"(port))
+extern void outs16(uint16_t port, void *buf, int rep);
 
-#define save_rflags(flags) __asm__("pushfq\npopq %0": "=r"(flags))
-#define load_rflags(flags) __asm__ __volatile__("pushq %0\npopfq":: "r"(flags))
+extern uint64_t disable(void);
+extern void restore(uint64_t flags);
+
+extern void setCR0(uint64_t value);
+extern uint64_t getCR0(void);
+
+extern uint64_t getCR2(void);
+
+extern void setCR3(void *page_table);
+extern uint64_t getCR3(void);
+
+extern void setCR4(uint64_t value);
+extern uint64_t getCR4(void);
+
+extern void setXCR0(uint64_t value);
+extern uint64_t getXCR0(void);
+
+extern void setDSAll(uint16_t segment);
+extern void setCSSS(uint16_t cs, uint16_t ss);
+
+extern void cpuid(int num, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx);
+
+extern uint64_t readMSR(uint32_t msr);
+extern void writeMSR(uint32_t msr, uint64_t value);
+
+extern uint64_t rdtsc(void);
+
+extern void callApp(uint64_t entry, uint64_t rsp);
+
+extern void syscall_entry(void);
 
 #endif

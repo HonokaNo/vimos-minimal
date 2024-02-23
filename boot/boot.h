@@ -7,9 +7,7 @@
 #define NULL (void *)0
 #endif
 
-__attribute__((ms_abi))
 EFI_STATUS OpenRootFolder(EFI_HANDLE ImageHandle, EFI_FILE_PROTOCOL **root_dir);
-__attribute__((ms_abi))
 EFI_STATUS ReadFile(EFI_FILE_PROTOCOL *file, VOID **buffer);
 
 #endif

@@ -1,12 +1,20 @@
 #ifndef __VIMOS_STDDEF_H__
 #define __VIMOS_STDDEF_H__
 
+#include <stdint.h>
+
+#ifndef NULL
 #define NULL ((void *)0)
+#endif
 
-typedef unsigned int size_t;
-/* wchar_t is 2 bytes */
-typedef unsigned short wchar_t;
+#ifndef DEF_SIZE_T
+#define DEF_SIZE_T
+typedef uint32_t size_t;
+#endif
 
-#define offsetof(type, mem) ((size_t)((char *)&((type *)0)->mem - (char *)(type *)0))
+#ifndef DEF_WCHAR_T
+#define DEF_WCHAR_T
+typedef uint16_t wchar_t;
+#endif
 
 #endif

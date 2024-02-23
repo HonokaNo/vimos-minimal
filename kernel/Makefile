@@ -1,22 +1,29 @@
 include ../env.mk
 
-KERNEL_HEADER := ../include/asm.h ../include/mem.h
-KERNEL_OBJ := kernel.o
+CFLAGS = $(DEFAULT_COMPILE_OPT) -I../include -I../include/stdlib -nostdinc --target=x86_64-elf -mno-red-zone -ffreestanding -mcmodel=large
+ASFLAGS = $(DEFAULT_COMPILE_OPT) -I../include $(DEFAULT_COMPILE_OPT) -O0 --target=x86_64-elf
+LDFLAGS = --entry _vMain -z norelro --image-base 0xffff800000000000 --static -Map kernel.map
 
-.PHONY: all
-all: $(KERNEL_OBJ)
+SRCS := $(wildcard *.S)
+SRCS += $(wildcard *.c)
+KERNEL_OBJ := $(SRCS:.c=.o)
+KERNEL_OBJ := $(KERNEL_OBJ:.S=.o)
 
 .PHONY: kernel
-kernel:
-	$(LINKER) --entry vMain -z norelro --image-base 0x100000 --static -Map kernel.map -o kernel.elf $(KERNEL_OBJ) ../stdlib/stdlib.a
-
-.c.o: $(HEADER)
-	$(COMPILER) $(DEFAULT_COMPILE_OPT) $(KERNEL_OPT) -o $@ -c $<
-.S.o: $(HEADER)
-	$(COMPILER) $(DEFAULT_COMPILE_OPT) -O0 --target=x86_64-elf -o $@ -c $<
+kernel.elf: asm.o $(KERNEL_OBJ) ../stdlib/stdlib.a
+	$(LD) $(LDFLAGS) -o $@ $(KERNEL_OBJ) ../stdlib/stdlib.a
 
 .PHONY: clean
 clean:
-	$(REMOVE) $(KERNEL_OBJ)
+	$(REMOVE) asm.o $(KERNEL_OBJ)
 	$(REMOVE) kernel.elf
 	$(REMOVE) kernel.map
+	$(REMOVE) kernel.elf.*
+	$(REMOVE) .depend
+
+depend: $(SRCS)
+	$(CC) -I../include -I../include/stdlib -M $(SRCS) > .depend
+
+ifeq (.depend,$(wildcard .depend))
+include .depend
+endif

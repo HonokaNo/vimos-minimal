@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-typedef uintptr_t  Elf_Addr;
+typedef uintptr_t Elf_Addr;
 typedef uint64_t  Elf_Off;
 typedef uint16_t  Elf_Half;
 typedef uint32_t  Elf_Word;
@@ -67,8 +67,5 @@ typedef struct{
   Elf_Xword   p_memsz;
   Elf_Xword   p_align;
 }Elf_Phdr;
-
-Elf_Phdr *getProgramHeader(Elf_Ehdr *ehdr);
-uint64_t getFirstLoadAddress(Elf_Ehdr *ehdr);
 
 #endif

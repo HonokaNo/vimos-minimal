@@ -1,19 +1,18 @@
 include ../env.mk
 
-STDLIB_OBJ := isdigit.o islower.o isspace.o isupper.o memcmp.o memset.o sprintf.o strcat.o strchr.o strcmp.o strcpy.o strlen.o strncpy.o strrchr.o tolower.o toupper.o vsprintf.o
+CFLAGS = $(DEFAULT_COMPILE_OPT) -I../include/stdlib -nostdinc --target=x86_64-elf -ffreestanding -mcmodel=large
+ASFLAGS = $(DEFAULT_COMPILE_OPT) -O0 --target=x86_64-elf
 
-.PHONY: all
-all:
-	$(MAKE) stdlib.a
+SRCS := $(wildcard *.c)
+SRCS += $(wildcard *.S)
+SRCS += $(wildcard sys/*.S)
+STDLIB_OBJ := $(SRCS:.c=.o)
+STDLIB_OBJ := $(STDLIB_OBJ:.S=.o)
 
 stdlib.a: $(STDLIB_OBJ)
 	$(AR) r $@ $(STDLIB_OBJ)
 
-.c.o:
-	$(COMPILER) $(DEFAULT_COMPILE_OPT) $(STDLIB_OPT) -o $@ -c $<
-.s.o:
-	$(COMPILER) $(DEFAULT_COMPILE_OPT) --target=x86_64-elf -o $@ -c $<
-
+.PHONY: clean
 clean:
-	$(REMOVE) $(STDLIB).o
+	$(REMOVE) $(STDLIB_OBJ)
 	$(REMOVE) stdlib.a

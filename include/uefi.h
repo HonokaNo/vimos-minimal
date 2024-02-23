@@ -382,49 +382,4 @@ struct _EFI_BLOCK_IO_PROTOCOL{
   void *FlushBlocks;
 };
 
-#define EFI_SIMPLE_NETWORK_PROTOCOL_GUID {0xa19832b9, 0xac25, 0x11d3, {0x9a, 0x2d, 0x00, 0x90, 0x27, 0x3f, 0xc1, 0x4d}}
-
-#define MAX_MCAST_FILTER_CNT 16
-
-typedef struct{
-  UINT32 State;
-  UINT32 HwAddressSize;
-  UINT32 MediaHeaderSize;
-  UINT32 MaxPacketSize;
-  UINT32 NvRamSize;
-  UINT32 NvRamAccessSize;
-  UINT32 ReceiveFilterMask;
-  UINT32 ReceiveFilterSetting;
-  UINT32 MaxMCastFilterCount;
-  UINT32 MCastFilterCount;
-  EFI_MAC_ADDRESS MCastFilter[MAX_MCAST_FILTER_CNT];
-  EFI_MAC_ADDRESS CurrentAddress;
-  EFI_MAC_ADDRESS BroadcastAddress;
-  EFI_MAC_ADDRESS PermanentAddress;
-  UINT8 IfType;
-  BOOLEAN MacAddressChangeable;
-  BOOLEAN MultipleTxSupported;
-  BOOLEAN MediaPresentSupported;
-  BOOLEAN MediaPresent;
-}EFI_SIMPLE_NETWORK_MODE;
-
-struct _EFI_SIMPLE_NETWORK_PROTOCOL{
-  UINT64 Revision;
-  void *Start;
-  void *Stop;
-  void *Initialize;
-  void *Reset;
-  void *Shutdown;
-  void *ReceiveFilters;
-  void *StationAddress;
-  void *Statistics;
-  void *MCastIpToMac;
-  void *NvData;
-  void *GetStatus;
-  void *Transmit;
-  void *Receive;
-  EFI_EVENT WaitForPacket;
-  EFI_SIMPLE_NETWORK_MODE *Mode;
-};
-
 #endif
